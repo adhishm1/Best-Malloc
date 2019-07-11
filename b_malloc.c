@@ -1,6 +1,7 @@
 #include <unistd.h>	
 #include <string.h>
-#include <pthread.h>
+#include <pthread.h> 
+/*for checking the block allocation*/
 #include <stdio.h>
 
 
@@ -12,13 +13,13 @@ union header {
 		union header *next;
 	} s;
 	
-	char ADS[16];
+	char ADS[16];//for making header size constant
 };
 typedef union header header_t;
 
 header_t *head = NULL, *tail = NULL;
 pthread_mutex_t sema4;
-
+/* this function return the free block from the linked list which best suits the size required*/
 header_t *get_free_block(size_t size)
 {
 size_t min=2000;
@@ -28,7 +29,7 @@ size_t min=2000;
 		if (curr->s.is_free && curr->s.size >= size)
 			{
 				if(min>curr->s.size)
-				min=curr->s.size;
+				min=curr->s.size;// finding the minimum block size which is greater the requirement
 			}
 		curr = curr->s.next;
 	}
@@ -103,6 +104,7 @@ void *b_malloc(size_t size)
 	
 	total_size = sizeof(header_t) + size;
 	block = sbrk(total_size);
+	/* sbrk() returns (void*) -1 when fails*/
 	if (block == (void*) -1) {
 		pthread_mutex_unlock(&sema4);
 		return NULL;
