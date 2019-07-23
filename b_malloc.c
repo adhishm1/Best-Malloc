@@ -139,24 +139,7 @@ void *calloc(size_t num, size_t nsize)
 	return block;
 }
 
-void *realloc(void *block, size_t size)
-{
-	header_t *header;
-	void *ret;
-	if (!block || !size)
-		return b_malloc(size);
-	header = (header_t*)block - 1;
-	if (header->s.size >= size)
-		return block;
-	ret = b_malloc(size);
-	if (ret) {
-		
-		memcpy(ret, block, header->s.size);
-		
-		free(block);
-	}
-	return ret;
-}
+
 void block_checker()
 {
 	printf("\n");
