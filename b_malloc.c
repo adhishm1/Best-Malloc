@@ -36,7 +36,7 @@ size_t min=2000;
 curr=head;
 while(curr) {
 		
-		if (curr->s.size == size)
+		if (curr->s.size == min)
 			{
 				return curr;
 			}
